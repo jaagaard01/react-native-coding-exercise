@@ -70,8 +70,6 @@ export default function Root() {
     });
   };
 
-  console.log(data?.launchesPast.length);
-
   const searchForFlights = () => {
     setHasMore(true);
     refetch({
