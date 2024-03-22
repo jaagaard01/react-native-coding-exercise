@@ -115,7 +115,6 @@ const styles = StyleSheet.create({
   dropdownItemText: {
     color: Colors.db,
     // fontFamily: 'Goldman-Bold',
-    // TODO ADD ALL THE PROPER FONTS
     fontSize: 15,
     fontWeight: "bold",
   },
