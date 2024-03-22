@@ -1,8 +1,10 @@
-import { useFonts } from "expo-font";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { SplashScreen, Stack } from "expo-router";
-import { useEffect } from "react";
+
 import { AppProvider } from "../store";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { useEffect } from "react";
+import { useFonts } from "expo-font";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -18,8 +20,7 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [loaded, error] = useFonts({
-  });
+  const [loaded, error] = useFonts({});
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
@@ -36,12 +37,19 @@ export default function RootLayout() {
     return null;
   }
 
+  const client = new ApolloClient({
+    uri: process.env.API_URL,
+    cache: new InMemoryCache(),
+  });
+
   return (
-    <AppProvider>
-      <SafeAreaProvider>
-        <RootLayoutNav />
-      </SafeAreaProvider>
-    </AppProvider>
+    <ApolloProvider client={client}>
+      <AppProvider>
+        <SafeAreaProvider>
+          <RootLayoutNav />
+        </SafeAreaProvider>
+      </AppProvider>
+    </ApolloProvider>
   );
 }
 

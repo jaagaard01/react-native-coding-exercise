@@ -1,3 +1,5 @@
+import { Colors, Fonts } from "../../constants";
+import { FC, PropsWithChildren } from "react";
 import {
   GestureResponderEvent,
   Pressable,
@@ -6,9 +8,8 @@ import {
   Text,
   ViewStyle,
 } from "react-native";
-import { FC, PropsWithChildren } from "react";
+
 import { ButtonWrap } from "./ButtonWrap";
-import { Colors, Fonts } from "../../constants";
 
 type ButtonProps = {
   onPress: (e: GestureResponderEvent) => void;
@@ -16,6 +17,7 @@ type ButtonProps = {
   style?: StyleProp<ViewStyle>;
   white?: boolean;
   disabled?: boolean;
+  textSize?: number;
 } & PropsWithChildren;
 
 export const Button: FC<ButtonProps> = ({
@@ -25,6 +27,7 @@ export const Button: FC<ButtonProps> = ({
   children,
   white = false,
   disabled = false,
+  textSize,
   ...props
 }) => {
   return (
@@ -40,7 +43,7 @@ export const Button: FC<ButtonProps> = ({
         {children ? (
           children
         ) : (
-          <Text style={[styles.text]}>
+          <Text style={[styles.text, { fontSize: textSize }]}>
             {text?.toUpperCase()}
           </Text>
         )}
@@ -63,7 +66,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    textAlignVertical: "center",
+    verticalAlign: "center",
     flexDirection: "row",
     gap: 5,
   },
@@ -72,15 +75,15 @@ const styles = StyleSheet.create({
     fontSize: 20,
     lineHeight: 24,
     fontWeight: "bold",
-    fontFamily: Fonts.FiraSansBold,
+    // fontFamily: Fonts.FiraSansBold,
     letterSpacing: 1,
   },
-  pressabeWhiteButton: {
-    borderWidth: 1,
-    borderColor: Colors.primaryPurple,
-    borderRadius: 6,
-  },
-  textWhiteButton: {
-    color: Colors.primaryPurple,
-  },
+  // pressabeWhiteButton: {
+  //   borderWidth: 1,
+  //   borderColor: Colors.primaryPurple,
+  //   borderRadius: 6,
+  // },
+  // textWhiteButton: {
+  //   color: Colors.primaryPurple,
+  // },
 });
