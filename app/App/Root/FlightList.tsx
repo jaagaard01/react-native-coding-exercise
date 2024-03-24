@@ -10,6 +10,8 @@ import {
 
 import { CircleRightIcon } from "../../../assets/vector/ChevronCircleRight";
 import { Colors } from "../../../constants";
+import { setFlightInfo } from "../../../store";
+import { useAppDispatch } from "../../../hooks/useReduxHooks";
 
 function getValueByPath(obj: any, path: string) {
   return path.split(".").reduce((acc, part) => acc && acc[part], obj);
@@ -30,6 +32,8 @@ export default function FlightList({
   onDetailScreenPress,
   setSelectedFlight,
 }: FlightListProps) {
+  const dispatch = useAppDispatch();
+
   const renderFlights: ListRenderItem<Flight> = ({ item }) => {
     const isSelected = selectedFlight?.id === item.id;
     return (
@@ -50,7 +54,12 @@ export default function FlightList({
         </View>
         {isSelected && (
           <View style={styles.iconContainer}>
-            <TouchableOpacity onPress={() => onDetailScreenPress()}>
+            <TouchableOpacity
+              onPress={() => {
+                dispatch(setFlightInfo(item));
+                onDetailScreenPress();
+              }}
+            >
               <CircleRightIcon />
             </TouchableOpacity>
           </View>

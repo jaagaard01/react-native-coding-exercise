@@ -1,4 +1,5 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useAppDispatch, useAppSelector } from "../../../hooks/useReduxHooks";
 
 import { BackButton } from "../../../assets/vector/BackButton";
 import { Button } from "../../../components";
@@ -6,13 +7,22 @@ import { Colors } from "../../../constants";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TicketBackground } from "../../../assets/vector/TicketBackground";
 import { TicketPageBackground } from "../../../assets/vector/TicketPageBackground";
+import { resetFlightInfo } from "../../../store";
 import { router } from "expo-router";
 
 export default function Ticket() {
+  const dispatch = useAppDispatch();
+  const flightInfo = useAppSelector((state) => state.flightInfo);
+
+  const onBack = () => {
+    router.back();
+    dispatch(resetFlightInfo());
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.backButtonContainer}>
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity onPress={onBack}>
           <BackButton />
         </TouchableOpacity>
       </View>
@@ -21,11 +31,31 @@ export default function Ticket() {
       </View>
       <View style={styles.contentContainer}>
         <TicketBackground style={styles.centeredSvg} />
-        <Button
-          onPress={() => router.back()}
-          style={styles.button}
-          text="Print Ticket"
-        />
+        <View style={styles.ticketInfoContainer}>
+          <View>
+            <View style={styles.topTicketContent}>
+              <Text style={styles.ticketTextTitle}>Mission Name</Text>
+              <Text style={styles.ticketTextMissionName}>
+                {flightInfo.mission_name}
+              </Text>
+            </View>
+            <View style={styles.bottomTicketContent}>
+              <View>
+                <Text style={styles.ticketTextTitle}>Rocket Name</Text>
+                <Text style={styles.ticketTextInfo}>
+                  {flightInfo.rocket.rocket_name}
+                </Text>
+              </View>
+              <View>
+                <Text style={styles.ticketTextTitle}>Rocket Type</Text>
+                <Text style={styles.ticketTextInfo}>
+                  {flightInfo.rocket.rocket_type}
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+        <Button onPress={onBack} style={styles.button} text="Print Ticket" />
       </View>
     </SafeAreaView>
   );
@@ -40,6 +70,7 @@ const styles = StyleSheet.create({
     padding: 16,
     position: "absolute",
     top: 40,
+    zIndex: 10,
   },
   backgroundContainer: {
     bottom: 0,
@@ -69,5 +100,38 @@ const styles = StyleSheet.create({
     height: 33,
     position: "absolute",
     width: 141,
+  },
+  ticketInfoContainer: {
+    position: "absolute",
+    top: "27%",
+    left: 45,
+    right: 0,
+    alignItems: "center",
+    justifyContent: "center",
+    transform: [{ rotate: "90deg" }],
+  },
+  topTicketContent: {
+    marginBottom: 20,
+  },
+  ticketTextTitle: {
+    fontSize: 7,
+    color: Colors.beige,
+    margin: 2,
+  },
+  ticketTextMissionName: {
+    fontSize: 20,
+    color: Colors.beige,
+    margin: 2,
+  },
+  ticketTextInfo: {
+    fontSize: 9,
+    color: Colors.beige,
+    margin: 2,
+  },
+  bottomTicketContent: {
+    display: "flex",
+    flexDirection: "row",
+    width: 200,
+    justifyContent: "space-between",
   },
 });
